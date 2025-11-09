@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buat Akun Baru</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#9333ea,#3b82f6); margin:0; height:100vh; display:flex; align-items:center; justify-content:center;}
+    .box { width:340px; background:#fff; padding:32px; border-radius:12px; box-shadow:0 6px 30px rgba(0,0,0,0.15); text-align:center; }
+    input{width:92%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px}
+    button{width:96%;padding:10px;margin-top:10px;border:none;border-radius:8px;background:#9333ea;color:#fff;font-weight:700;cursor:pointer}
+    .links{margin-top:12px;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Buat Akun Baru</h2>
+
+    <input id="newUser" placeholder="Username baru" />
+    <input id="newPass" type="password" placeholder="Password" />
+    <input id="confirmPass" type="password" placeholder="Konfirmasi password" />
+    <button id="btnRegister">Daftar</button>
+
+    <div class="links">
+      <p>Sudah punya akun? <a href="login.html">Kembali ke Login</a></p>
+    </div>
+  </div>
+
+  <script>
+    function getUsers(){ return JSON.parse(localStorage.getItem('users') || 'null') || []; }
+    function saveUsers(list){ localStorage.setItem('users', JSON.stringify(list)); }
+
+    document.getElementById('btnRegister').addEventListener('click', function(){
+      const u = document.getElementById('newUser').value.trim();
+      const p = document.getElementById('newPass').value;
+      const c = document.getElementById('confirmPass').value;
+
+      if(!u || !p || !c) { alert('Harap isi semua kolom.'); return; }
+      if(p !== c){ alert('Password dan konfirmasi tidak sama.'); return; }
+      if(u.length < 3){ alert('Username minimal 3 karakter.'); return; }
+      if(p.length < 4){ alert('Password minimal 4 karakter.'); return; }
+
+      const users = getUsers();
+      if(users.some(x => x.username === u)){ alert('Username sudah dipakai. Pilih yang lain.'); return; }
+
+      users.push({ username: u, password: p });
+      saveUsers(users);
+      alert('Akun berhasil dibuat! Silakan login.');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
